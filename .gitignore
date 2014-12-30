@@ -52,3 +52,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+
+## Jwright custom
+RPi.GPIO-0.5.8/
