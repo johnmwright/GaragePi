@@ -9,18 +9,18 @@ class SonicController:
     self.triggerPin = triggerPin
     self.echoPin = echoPin
 
-    print "Initializing Ultrasonic Range Finder"
+    print("Initializing Ultrasonic Range Finder")
 
     GPIO.setup(self.triggerPin, GPIO.OUT, pull_up_down = GPIO.PUD_DOWN)
     GPIO.setup(self.echoPin, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
     GPIO.output(self.triggerPin, False)
-    print "Waiting For Sensor To Settle"
+    print("Waiting For Sensor To Settle")
     time.sleep(2)
 
   def readDistance(self):
 
-    print "Distance Measurement In Progress " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    print("Distance Measurement In Progress")
 
     GPIO.output(self.triggerPin, True)
     time.sleep(0.00001)
@@ -39,11 +39,11 @@ class SonicController:
     pulse_duration = pulse_end - pulse_start
     roundtrip_duration = pulse_duration * self.SPEED_OF_SOUND
     one_way_distance = roundtrip_duration/2
-    print "    Distance: %.2f cm" %one_way_distance
+    print("    Distance: {0:0.2f} cm".format(one_way_distance))
     return one_way_distance
 
 
   def teardown(self):
-    print "Tearing down Ultrasonic Range Finder"
+    print("Tearing down Ultrasonic Range Finder")
     GPIO.output(self.triggerPin, False)
 
