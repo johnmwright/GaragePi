@@ -2,11 +2,12 @@
 
 #
 # For details, see the following blog posts:
-#     GaragePi – My Raspberry Pi Playground : http://www.wrightfully.com/garagepi-my-raspberry-pi-playground/
+#     GaragePi - My Raspberry Pi Playground : http://www.wrightfully.com/garagepi-my-raspberry-pi-playground/
 #     GaragePi v2: Temperature and Light : http://www.wrightfully.com/garagepi-v2-temperature-and-light/
 
 import RPi.GPIO as GPIO
 import time
+from pymongo import MongoClient
 import SonicController as Sonic
 import LedController as LED
 import PhotocellController as Lux
@@ -62,6 +63,9 @@ ledBlue = LED.LedController(LED_BLUE, "blue - unused")
 try:
   ledRun.turnOn()
 
+  dbclient = MongoClient()
+  db = dbclient.garagePi_database
+
   while True:
     print("Beginning Sensor Checks {}".format( time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))
 
@@ -78,6 +82,15 @@ try:
         ledLight.turnOn()
     else:
         ledLight.turnOff()
+
+    record = { "doorOpen" : garageDoorIsOpen,
+               "lightOn"  : lightIsOn,
+               "temp_F"   : temp_f
+    }
+
+    readings = db.readings
+    readingId = readings.insert(record)
+    print("    readings posted to db with id {}".format(readingId))
 
     time.sleep(SAMPLE_SPEED)
 
