@@ -1,0 +1,17 @@
+{
+  "name": "GargagePiWebsite",
+  "version": "0.0.1",
+  "description": "Website for GaragePi",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodejs server.js"
+  },
+  "author": "John M. Wright",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.11.1",
+    "jade": "^1.9.1",
+    "mongodb": "^1.4.28"
+  }
+}

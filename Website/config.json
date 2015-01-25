@@ -1,0 +1,10 @@
+{
+    "dbconnection": {
+        "dbName": "garagePi_database",
+        "host": "localhost",
+        "port": 27017
+    },
+    "http": { 
+        "listenPort":  8080
+    }
+}
