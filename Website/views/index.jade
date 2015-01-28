@@ -1,5 +1,25 @@
-html
-   head
-      title GaragePi
-   body Record Count: #{count}
-   
+extends layout
+
+block content
+  h1 Current Status
+  dl.dl-horizontal
+    dt Garage Door:
+    case reading.doorOpen
+      when false
+        dd
+          span.glyphicon.glyphicon-download
+          span Closed
+      default
+        dd
+          span.glyphicon.glyphicon-upload
+          span Open
+    dt Light:
+    case reading.lightOn
+      when true
+        dd On
+      default
+        dd Off
+    dt Temp:
+    dd= reading.temp_F
+    dt Time:
+    dd= reading.timestamp

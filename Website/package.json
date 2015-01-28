@@ -1,17 +1,22 @@
 {
   "name": "GargagePiWebsite",
   "version": "0.0.1",
+  "private":  true,
   "description": "Website for GaragePi",
-  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodejs server.js"
+    "start": "nodejs ./bin/www"
   },
   "author": "John M. Wright",
   "license": "MIT",
   "dependencies": {
     "express": "^4.11.1",
     "jade": "^1.9.1",
-    "mongodb": "^1.4.28"
+    "mongodb": "^1.4.28",
+    "static-favicon": "~1.0.0",
+    "morgan": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "body-parser": "~1.0.0",
+    "debug": "~0.7.4"    
   }
 }
