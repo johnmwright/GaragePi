@@ -7,6 +7,7 @@
 
 import RPi.GPIO as GPIO
 import time
+from datetime import datetime, timedelta
 from pymongo import MongoClient
 import SonicController as Sonic
 import LedController as LED
@@ -50,6 +51,7 @@ def checkLight():
     print("  - Light is off")
     return False
 
+
 ledRun = LED.LedController(LED_RUN, "Running Indicator")
 ledDoor = LED.LedController(LED_OPEN, "Door Open")
 ledLight = LED.LedController(LED_LIGHT, "Light On")
@@ -60,6 +62,8 @@ tempSensor = Temperature.TempSensorController(0)
 # this is just to make sure the led is initialized to off
 ledBlue = LED.LedController(LED_BLUE, "blue - unused")
 
+lastRecord = None
+
 try:
   ledRun.turnOn()
 
@@ -67,7 +71,8 @@ try:
   db = dbclient.garagePi_database
 
   while True:
-    print("Beginning Sensor Checks {}".format( time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))
+    timestamp = datetime.now()
+    print("Beginning Sensor Checks {}".format( timestamp))
 
     garageDoorIsOpen = checkGarageDoor()
     lightIsOn = checkLight()
@@ -85,13 +90,29 @@ try:
 
     record = { "doorOpen" : garageDoorIsOpen,
                "lightOn"  : lightIsOn,
-               "temp_F"   : temp_f
+               "temp_F"   : temp_f,
+               "timestamp": timestamp,
+               "sourceLanguage": "python"
     }
 
-    readings = db.readings
-    readingId = readings.insert(record)
-    print("    readings posted to db with id {}".format(readingId))
+    if (lastRecord is None):
+      print("       + lastRecord is None")
+    else:
+      if (garageDoorIsOpen != lastRecord["doorOpen"]):
+        print("       + garageDoorIsOpen differs from lastRecord {}".format(lastRecord["doorOpen"]))
+      if (lightIsOn != lastRecord["lightOn"]):
+        print("       + lightIsOn differs from lastRecord {}".format(lastRecord["lightOn"]))
+      if (timestamp.hour != lastRecord["timestamp"].hour):
+        print("       + timestamp.hour {} differs from lastRecord {}".format(timestamp.hour, lastRecord["timestamp"].hour))
 
+
+    if (lastRecord is None or garageDoorIsOpen != lastRecord["doorOpen"] or lightIsOn != lastRecord["lightOn"] or timestamp.hour != lastRecord["timestamp"].hour):
+
+      readings = db.readings
+      readingId = readings.insert(record)
+      print("    readings posted to db with id {}".format(readingId))
+
+    lastRecord = record
     time.sleep(SAMPLE_SPEED)
 
 except KeyboardInterrupt:
