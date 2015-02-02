@@ -14,7 +14,7 @@ class PhotocellController:
 
     def resistanceTime(self):
         print("    Reading photocell")
-        timeout = 3000
+        timeout = 1000
         reading = 0
         GPIO.setup(self.pin, GPIO.OUT)
         GPIO.output(self.pin, GPIO.LOW)
