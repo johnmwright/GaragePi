@@ -71,7 +71,7 @@ try:
   db = dbclient.garagePi_database
 
   while True:
-    timestamp = datetime.now()
+    timestamp = datetime.utcnow()
     print("Beginning Sensor Checks {}".format( timestamp))
 
     garageDoorIsOpen = checkGarageDoor()
@@ -95,21 +95,26 @@ try:
                "sourceLanguage": "python"
     }
 
-    if (lastRecord is None):
+    shouldSaveRecord = False
+    if lastRecord is None:
       print("       + lastRecord is None")
+      shouldSaveRecord = True
     else:
-      if (garageDoorIsOpen != lastRecord["doorOpen"]):
+      if garageDoorIsOpen or garageDoorIsOpen != lastRecord["doorOpen"]:
         print("       + garageDoorIsOpen differs from lastRecord {}".format(lastRecord["doorOpen"]))
-      if (lightIsOn != lastRecord["lightOn"]):
+        shouldSaveRecord = True
+      if lightIsOn or lightIsOn != lastRecord["lightOn"]:
         print("       + lightIsOn differs from lastRecord {}".format(lastRecord["lightOn"]))
-      if (timestamp.hour != lastRecord["timestamp"].hour):
-        print("       + timestamp.hour {} differs from lastRecord {}".format(timestamp.hour, lastRecord["timestamp"].hour))
+        shouldSaveRecord = True
+
+      alreadyRecordedForThisMinute = timestamp.minute == lastRecord["timestamp"].minute
+      if not alreadyRecordedForThisMinute and (timestamp.minute == 0 or timestamp.minute == 15 or timestamp.minute == 30 or timestamp.minute == 45):
+        print("       + recording due to 15 minute period")
+        shouldSaveRecord = True
 
 
-    if (lastRecord is None or garageDoorIsOpen != lastRecord["doorOpen"] or lightIsOn != lastRecord["lightOn"] or timestamp.hour != lastRecord["timestamp"].hour):
-
-      readings = db.readings
-      readingId = readings.insert(record)
+    if shouldSaveRecord:
+      readingId = db.readings.insert(record)
       print("    readings posted to db with id {}".format(readingId))
 
     lastRecord = record
