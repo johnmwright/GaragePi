@@ -1,6 +1,9 @@
 extends layout
 
 block content
+  script(src='http://d3js.org/d3.v3.min.js')
+  script(src='/javascripts/graph.js' type='text/javascript')
+
   h1 Current Status
   dl.dl-horizontal
     dt Garage Door:
@@ -8,7 +11,7 @@ block content
       when false
         dd
           span.glyphicon.glyphicon-download
-          span Closed
+          span &nbsp;Closed
       default
         dd
           span.glyphicon.glyphicon-upload
@@ -20,6 +23,34 @@ block content
       default
         dd Off
     dt Temp:
-    dd= reading.temp_F
-    dt Time:
+    dd #{reading.temp_F} °F
+    dt Last Record:
     dd= reading.timestamp
+    
+  graph/
+  script.
+    renderChart('graph', !{JSON.stringify(readings)})
+
+  if showRecords
+    hr
+    
+    div
+      table.table.table-striped
+        thead
+          tr
+            th Id
+            th Lang
+            th LightOn
+            th DoorOpen
+            th Temp
+            th Timestamp
+        tbody
+          each record, i in readings
+            tr
+              td #{record._id}
+              td #{record.sourceLanguage}
+              td #{record.lightOn}
+              td #{record.doorOpen}
+              td #{record.temp_F}
+              td #{record.timestamp}
+  

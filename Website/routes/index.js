@@ -3,71 +3,58 @@ var router = express.Router();
 
 
 
-var countRecords = function(db, callback) {
-
-    db.open(function(err) {
-        if (err) throw err;
-
-        db.collection("readings", function(err, collection) {
-            if (err) throw err;
-
-
-            collection.count(function(err, numberOfRecords) {
-                if (err) throw err;
-
-                console.log("Readings count is %d", numberOfRecords);
-                db.close();
-                callback(numberOfRecords);
-
-            });
-        });
-
-    });
-};
-
-var topRecords = function(db, numRecords, callback) {
-
-    db.open(function (err) {
-        if (err) throw err;
-
-        db.collection("readings", function (err, collection) {
-            if (err) throw err;
-            
-           
-            collection.find().sort({ _id: -1 }).limit(numRecords).toArray(function(err, results) {
-                if (err) throw err;
-                console.log("Found %d records", results.length);
-                db.close();
-                callback(results);
-            });
-         
-        });
-
-    });
-};
-
-
-
-var lastRecord = function (db, callback) {
-
-    topRecords(db, 1, function(results) {
-        callback(results[0]);
-    });
-};
-
 /* GET home page. */
-router.get('/', function (req, res) {
-    //countRecords(req.db, function (numberOfRecords) {
-    //        res.render('index', { count: numberOfRecords });
-    //    });
-    //topRecords(req.db, 10, function(records) {
-    //    res.render('index', { records: records });
-    //});
-    lastRecord(req.db, function (record) {
-        console.log("XXX");
-        console.log(record);
-        res.render('index', { reading: record });
+router.get('/', function(req, res) {
+
+
+    var recordsSince = function(db, dataSinceDate, callback) {
+
+        db.open(function(err) {
+            if (err) throw err;
+
+            db.collection("readings", function(err, collection) {
+                if (err) throw err;
+
+                collection
+                    .find({ "timestamp": { "$gt": dataSinceDate } })
+                    .sort({ "timestamp": -1 })
+                    .toArray(function(err, results) {
+                        if (err) throw err;
+                        //console.log("Found %d records", results.length);
+                        db.close();
+                        callback(results);
+                    });
+
+            });
+
+        });
+    };
+
+
+    var numDaysToShow = 2;
+
+    var currentDate = new Date();
+    //console.log("CurrentDate is " + currentDate);
+
+    var dataSinceDate = new Date(currentDate.setDate(currentDate.getDate() - numDaysToShow));
+    //console.log("DataSinceDate is " + dataSinceDate);
+
+    recordsSince(req.db, dataSinceDate, function(records) {
+
+        var tempReadings = records;
+
+        //console.log(tempReadings);
+        //console.log("Found " + tempReadings.length);
+
+        var mostRecent = records[0];
+
+        res.render('index', {
+            reading: mostRecent,
+            readings: tempReadings,
+            showRecords: false
+        });
     });
+
 
 });
 
