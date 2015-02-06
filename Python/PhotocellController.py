@@ -21,7 +21,7 @@ class PhotocellController:
         time.sleep(0.1)
 
         GPIO.setup(self.pin, GPIO.IN)
-        # This takes about 1 millisecond per loop cycle
+        # This takes about 1 millisecond per loop cycle (really, it's longer)
         while (GPIO.input(self.pin) == GPIO.LOW):
             reading += 1
             if reading > timeout:
