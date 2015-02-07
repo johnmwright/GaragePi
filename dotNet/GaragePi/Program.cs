@@ -24,16 +24,16 @@ namespace GaragePi
 
         
         //# GPIO pin numbers
-        private const ConnectorPin LED_RED = ConnectorPin.GPIO12;
-        private const ConnectorPin LED_GREEN = ConnectorPin.GPIO26;
-        private const ConnectorPin LED_BLUE = ConnectorPin.GPIO13;
-
-        private const ConnectorPin TRIG = ConnectorPin.GPIO23;
-        private const ConnectorPin ECHO = ConnectorPin.GPIO24;
-        private const ConnectorPin LED_OPEN = LED_RED;
-        private const ConnectorPin LED_RUN = ConnectorPin.GPIO25;
-        private const ConnectorPin PHOTO = ConnectorPin.GPIO17;
-        private const ConnectorPin LED_LIGHT = LED_GREEN;
+        private static readonly ConnectorPin LED_RED = ProcessorPin.Pin12.ToConnector();
+        private static readonly ConnectorPin LED_GREEN = ProcessorPin.Pin26.ToConnector();
+        private static readonly ConnectorPin LED_BLUE = ProcessorPin.Pin13.ToConnector();
+                        
+        private static readonly ConnectorPin TRIG = ProcessorPin.Pin23.ToConnector();
+        private static readonly ConnectorPin ECHO = ProcessorPin.Pin24.ToConnector();
+        private static readonly ConnectorPin LED_OPEN = LED_RED;
+        private static readonly ConnectorPin LED_RUN = ProcessorPin.Pin25.ToConnector();
+        private static readonly ConnectorPin PHOTO = ProcessorPin.Pin17.ToConnector();
+        private static readonly ConnectorPin LED_LIGHT = LED_GREEN;
 
 
         static void Main(string[] args)
