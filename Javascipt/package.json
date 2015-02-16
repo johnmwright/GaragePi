@@ -1,0 +1,20 @@
+{
+  "name": "GaragePi",
+  "version": "0.0.1",
+  "description": "Node.JS implementation of my GaragePi project",
+  "private": true,
+  "main": "garagePi.js",
+  "scripts": {
+    "start": "nodejs garagePi.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "John M. Wright",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^0.9.0",
+    "ds18b20": "0.0.2",
+	"mongodb": "^1.4.31",
+    "r-pi-usonic": "^2.4.0",
+    "rpi-gpio": "git+https://github.com/johnmwright/rpi-gpio.js.git#johnmwright-bcm-patch"
+  }
+}
