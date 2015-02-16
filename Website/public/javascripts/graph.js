@@ -21,12 +21,7 @@ function renderChart(tagName, data) {
     var yAxis = d3.svg.axis().scale(y)
         .orient("left").ticks(5);
 
-    // Define the temperature line
-    var valueline = d3.svg.line()
-        .interpolate("linear")
-        .x(function(d) { return x(d.timestamp); })
-        .y(function(d) { return y(d.temp_F); });
-
+    
     // Adds the svg canvas
     var svg = d3.select(tagName)
         .append("svg")
@@ -52,6 +47,7 @@ function renderChart(tagName, data) {
 
 
     });
+
 
     // Scale the range of the data
     var maxTemp = d3.max(data, function(d) { return d.temp_F; });
@@ -88,6 +84,13 @@ function renderChart(tagName, data) {
         .attr("cx", function (d) { return x(d.timestamp); })
         .attr("cy", function (d) { return yDoorAndLight(d.lightOn); });
 
+
+
+    // Define the temperature line
+    var valueline = d3.svg.line()
+        .interpolate("linear")
+        .x(function (d) { return x(d.timestamp); })
+        .y(function (d) { return y(d.temp_F); });
 
     // Add the temperature valueline path.
     svg.append("path")

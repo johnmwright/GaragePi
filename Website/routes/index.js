@@ -19,8 +19,7 @@ router.get('/', function(req, res) {
                     .find({ "timestamp": { "$gt": dataSinceDate } })
                     .sort({ "timestamp": -1 })
                     .toArray(function(err, results) {
-                        if (err) throw err;
-                        //console.log("Found %d records", results.length);
+                        if (err) throw err;                        
                         db.close();
                         callback(results);
                     });
@@ -32,20 +31,12 @@ router.get('/', function(req, res) {
 
 
     var numDaysToShow = 2;
-
     var currentDate = new Date();
-    //console.log("CurrentDate is " + currentDate);
-
     var dataSinceDate = new Date(currentDate.setDate(currentDate.getDate() - numDaysToShow));
-    //console.log("DataSinceDate is " + dataSinceDate);
 
     recordsSince(req.db, dataSinceDate, function(records) {
 
         var tempReadings = records;
-
-        //console.log(tempReadings);
-        //console.log("Found " + tempReadings.length);
-
         var mostRecent = records[0];
 
         res.render('index', {
