@@ -7,6 +7,7 @@ Using a Raspberry Pi mounted in my garage, I check if the garage door has been l
 
 * [GaragePi – My Raspberry Pi Playground](http://www.wrightfully.com/garagepi-my-raspberry-pi-playground/)
 * [GaragePi v2: Temperature and Light](http://www.wrightfully.com/garagepi-v2-temperature-and-light/)
+* [GaragePi v3: Data Persistence and Visualization and Other Small Improvements](http://www.wrightfully.com/garagepi-v3-data-persistence-and-visualization-and-other-small-improvements/)
 
 # The circuit diagram that goes along with the code:
 
